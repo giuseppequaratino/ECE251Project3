@@ -1,13 +1,16 @@
 .data
 
 .balign 4
-printformat: .asciz "%d\n"
+printformat: .asciz "%s\n"
 
 .balign 4
 printerr: .asciz "%s\n"
 
 .balign 4
 delimitor: .asciz "+,-,*,/,^" /*add delimitors for each operation "+,-,*,/,^" worry about parentheses later*/
+
+.balign 4
+operator: .asciz "0,1,2,3,4,5,6,7,8,9,." /*add delimitors for each operation "+,-,*,/,^" worry about parentheses later*/
 
 .balign 4
 opgt3: .asciz "Error: Number of arithmetic operators is greater than 3"
@@ -47,9 +50,8 @@ main:
 split:
 
 	ldr r0, [r0] 		/*strtok(string, delimitors)*/
-	ldr r1, =delimitor
+	ldr r1, =operator
 	bl strtok 		/*stores pointer to token in r0*/    
-	bl atoi 		/*converts string token to int */
 
 	mov r10, #0
 
@@ -59,18 +61,15 @@ loop:
 	bl printf
 
 	mov r0, #0	
-	ldr r1, =delimitor
+	ldr r1, =operator
 	bl strtok 		/*stores pointer to token in r0*/    
 	
 	mov r1, r0 		/*breaks if token pointer is a NULL pointer*/	
 	cmp r0, #0
 	beq end
 
-	mov r0, r1
-	bl atoi 		/* converts string token to int */
-
 	add r10, r10, #1	/*increments scratch register that holds the token count */
-	cmp r10, #3		/*breaks to error if gt 3 */
+	cmp r10, #2		/*breaks to error if gt 3 */
 	bgt err_opgt3
 	b loop
 
