@@ -1,3 +1,4 @@
+/* To run this file use, use the command:  arm-linux-gnueabi-gcc operate.S -o operate.out -ggdb3 -static -mfpu=vfp -mfloat-abi=hard -lm */
 .data
 .balign 4
         enterFirst:  .asciz "Enter the first number: "
